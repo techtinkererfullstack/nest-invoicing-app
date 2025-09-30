@@ -7,18 +7,27 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import type { Sale, SalesStatus } from './sales.model';
 import { SalesService } from './sales.service';
 import { CreateSalesDto } from './dto/create-sales.dto';
+import { GetSalesFilterDto } from './dto/get-sales-filter.dto';
 
 @Controller('sales')
 export class SalesController {
   constructor(private salesService: SalesService) {}
 
   @Get()
-  getAllSales(): Sale[] {
-    return this.salesService.getAllSales();
+  //   getAllSales(): Sale[] {
+  //     return this.salesService.getAllSales();
+  //   }
+  getSales(@Query() filterDto: GetSalesFilterDto): Sale[] {
+    if (Object.keys(filterDto).length) {
+      return this.salesService.getSalesWithFilters(filterDto);
+    } else {
+      return this.salesService.getAllSales();
+    }
   }
 
   @Get('/:id')

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Sale, SalesStatus } from './sales.model';
 import * as uuid from 'uuid';
 import { CreateSalesDto } from './dto/create-sales.dto';
+import { GetSalesFilterDto } from './dto/get-sales-filter.dto';
 
 @Injectable()
 export class SalesService {
@@ -9,6 +10,22 @@ export class SalesService {
 
   getAllSales(): Sale[] {
     return this.sales;
+  }
+
+  getSalesWithFilters(filterDto: GetSalesFilterDto): Sale[] {
+    const { status, search } = filterDto;
+    let sales = this.getAllSales();
+    if (status) {
+      sales = sales.filter((sale) => sale.status === status);
+    }
+    if (search) {
+      sales = sales.filter(
+        (sale) =>
+          sale.status.includes(search) || sale.customerPhone.includes(search),
+      );
+    }
+
+    return sales;
   }
 
   getSaleById(id: string): Sale | undefined {
