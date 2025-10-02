@@ -67,6 +67,7 @@ export class SalesService {
   }
 
   deleteSale(id: string): void {
+    const sale = this.getSaleById(id);
     this.sales = this.sales.filter((sale) => sale.id !== id);
   }
 }

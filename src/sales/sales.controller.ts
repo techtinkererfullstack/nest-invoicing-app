@@ -8,6 +8,8 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import type { Sale, SalesStatus } from './sales.model';
 import { SalesService } from './sales.service';
@@ -41,6 +43,7 @@ export class SalesController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createSale(@Body() CreateSalesDto: CreateSalesDto): Sale {
     return this.salesService.createSale(CreateSalesDto);
   }
